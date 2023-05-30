@@ -36,120 +36,120 @@ Para aplicar a arquitetura CQRS ao seu projeto, recomenda-se atribuir responsabi
 - Namespace Repository: aqui você pode adicionar as classes de repositório, que representam a camada de acesso a dados do seu sistema. Por exemplo: UserRepository.cs, ProductRepository.cs, etc.
 - Namespace Views: aqui você pode adicionar as classes de exibição, que representam as janelas do seu sistema. Por exemplo: MainForm.cs, CreateUserForm.cs, etc.
 
-´´´Csharp
-// Model
-public class UserModel
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-}
+´´´
+  // Model
+  public class UserModel
+  {
+      public int Id { get; set; }
+      public string Name { get; set; }
+      public string LastName { get; set; }
+      public string Email { get; set; }
+  }
 
-// Commands
-public class CreateUserCommand
-{
-    public UserModel User { get; set; }
-}
+  // Commands
+  public class CreateUserCommand
+  {
+      public UserModel User { get; set; }
+  }
 
-public class UpdateUserCommand
-{
-    public int Id { get; set; }
-    public UserModel User { get; set; }
-}
+  public class UpdateUserCommand
+  {
+      public int Id { get; set; }
+      public UserModel User { get; set; }
+  }
 
-public class DeleteUserCommand
-{
-    public int Id { get; set; }
-}
+  public class DeleteUserCommand
+  {
+      public int Id { get; set; }
+  }
 
-// Queries
-public class GetUserQuery
-{
-    public int Id { get; set; }
-}
+  // Queries
+  public class GetUserQuery
+  {
+      public int Id { get; set; }
+  }
 
-public class GetAllUsersQuery
-{
-}
+  public class GetAllUsersQuery
+  {
+  }
 
-// Services
-public class UserService
-{
-    private readonly IRepository<UserModel> userRepository;
+  // Services
+  public class UserService
+  {
+      private readonly IRepository<UserModel> userRepository;
 
-    public UserService(IRepository<UserModel> userRepository)
-    {
-        this.userRepository = userRepository;
-    }
+      public UserService(IRepository<UserModel> userRepository)
+      {
+          this.userRepository = userRepository;
+      }
 
-    public void CreateUser(UserModel user)
-    {
-        userRepository.Create(user);
-    }
+      public void CreateUser(UserModel user)
+      {
+          userRepository.Create(user);
+      }
 
-    public void UpdateUser(int id, UserModel user)
-    {
-        userRepository.Update(id, user);
-    }
+      public void UpdateUser(int id, UserModel user)
+      {
+          userRepository.Update(id, user);
+      }
 
-    public void DeleteUser(int id)
-    {
-        userRepository.Delete(id);
-    }
+      public void DeleteUser(int id)
+      {
+          userRepository.Delete(id);
+      }
 
-    public UserModel GetUser(int id)
-    {
-        return userRepository.GetById(id);
-    }
+      public UserModel GetUser(int id)
+      {
+          return userRepository.GetById(id);
+      }
 
-    public IEnumerable<UserModel> GetAllUsers()
-    {
-        return userRepository.GetAll();
-    }
-}
+      public IEnumerable<UserModel> GetAllUsers()
+      {
+          return userRepository.GetAll();
+      }
+  }
 
-// Repository
-public interface IRepository<TModel> where TModel : class
-{
-    void Create(TModel model);
-    void Update(int id, TModel model);
-    void Delete(int id);
-    TModel GetById(int id);
-    IEnumerable<TModel> GetAll();
-}
+  // Repository
+  public interface IRepository<TModel> where TModel : class
+  {
+      void Create(TModel model);
+      void Update(int id, TModel model);
+      void Delete(int id);
+      TModel GetById(int id);
+      IEnumerable<TModel> GetAll();
+  }
 
-public class UserRepository : IRepository<UserModel>
-{
-    private readonly List<UserModel> users = new List<UserModel>();
-    public void Create(UserModel model)
-    {
-        users.Add(model);
-    }
+  public class UserRepository : IRepository<UserModel>
+  {
+      private readonly List<UserModel> users = new List<UserModel>();
+      public void Create(UserModel model)
+      {
+          users.Add(model);
+      }
 
-    public void Delete(int id)
-    {
-        var user = GetById(id);
-        users.Remove(user);
-    }
+      public void Delete(int id)
+      {
+          var user = GetById(id);
+          users.Remove(user);
+      }
 
-    public IEnumerable<UserModel> GetAll()
-    {
-        return users;
-    }
+      public IEnumerable<UserModel> GetAll()
+      {
+          return users;
+      }
 
-    public UserModel GetById(int id)
-    {
-        return users.Find(u => u.Id == id);
-    }
+      public UserModel GetById(int id)
+      {
+          return users.Find(u => u.Id == id);
+      }
 
-    public void Update(int id, UserModel model)
-    {
-        var user = GetById(id);
-        users.Remove(user);
-        users.Add(model);
-    }
-}
+      public void Update(int id, UserModel model)
+      {
+          var user = GetById(id);
+          users.Remove(user);
+          users.Add(model);
+      }
+  }
 
 // Views are not included in this code snippet
 ´´´
