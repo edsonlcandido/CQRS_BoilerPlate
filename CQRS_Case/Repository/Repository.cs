@@ -7,49 +7,35 @@ using System.Threading.Tasks;
 
 namespace CQRS_Case.Repository
 {
-    public class Repository<T> : IRepository<T> where T : Item
+    public class UserRepository : IRepository<UserModel>
     {
-        private readonly DbContext _context;
-        private readonly DbSet<T> _entities;
-
-        public Repository(DbContext context)
+        private readonly List<UserModel> users = new List<UserModel>();
+        public void Create(UserModel model)
         {
-            _context = context;
-            _entities = _context.Set<T>();
-        }
-
-        public IEnumerable<T> GetAll()
-        {
-            return _entities.ToList();
-        }
-
-        public T GetById(int id)
-        {
-            return _entities.Find(id);
-        }
-
-        public void Add(T entity)
-        {
-            _entities.Add(entity);
-            _context.SaveChanges();
-        }
-
-        public void Update(T entity)
-        {
-            _entities.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            users.Add(model);
         }
 
         public void Delete(int id)
         {
-            var entity = GetById(id);
+            var user = GetById(id);
+            users.Remove(user);
+        }
 
-            if (entity != null)
-            {
-                _entities.Remove(entity);
-                _context.SaveChanges();
-            }
+        public IEnumerable<UserModel> GetAll()
+        {
+            return users;
+        }
+
+        public UserModel GetById(int id)
+        {
+            return users.Find(u => u.Id == id);
+        }
+
+        public void Update(int id, UserModel model)
+        {
+            var user = GetById(id);
+            users.Remove(user);
+            users.Add(model);
         }
     }
 }

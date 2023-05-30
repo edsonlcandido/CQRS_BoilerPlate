@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CQRS_Case.Repository
 {
-    public interface IRepository<T>
+    public interface IRepository<TModel> where TModel : class
     {
-        IEnumerable<T> GetAll();
-        T GetById(int id);
-        void Add(T entity);
-        void Update(T entity);
+        void Create(TModel model);
+        void Update(int id, TModel model);
         void Delete(int id);
+        TModel GetById(int id);
+        IEnumerable<TModel> GetAll();
     }
 }
